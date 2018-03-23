@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>A component of comment with edit and delete buttons</title>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css">
     <script src="../../js/react.min.js"></script>
     <script src="../../js/react-dom.min.js"></script>
     <script src="../../js/browser.min.js"></script>
@@ -14,24 +15,45 @@
     <script type="text/babel">
 
         var Comment = React.createClass({
+          getInitialState: function(){
+              return{editing:false}
+          },
           edit: function(){
-            alert('Editing Comment');
+              this.setState({editing:true});
           },
-          delete: function(){
-            alert('Deleting Comment');
+          remove: function(){
+            console.log('Deleting Comment');
           },
-          render: function(){
-            return(
-                  <div>
-                      <div>{this.props.children}</div>
-                      <button onClick={this.edit} >Edit</button>
-                      <button onClick={this.delete} >Delete</button>
+          save: function(){
+              this.setState({editing:false});
+          },
+          renderNormal: function(){
+              return(
+                  <div className="commentContainer">
+                      <div className="commentText">{this.props.children}</div>
+                      <button className="button-primary" onClick={this.edit} >Edit</button>
+                      <button className="button-danger" onClick={this.remove} >Remove</button>
                   </div>
                   )
+          },
+          renderForm: function(){
+                return(
+                  <div className="commentContainer">
+                      <textarea defaultValue={this.props.children}></textarea>
+                      <button className="button-success" onClick={this.save} >Save</button>
+                  </div>
+                  )
+          },
+          render: function(){
+              if(this.state.editing){
+                return this.renderForm();
+              }else{
+                return this.renderNormal();
+              }
           }
         });
         ReactDOM.render(
-          <div>
+          <div className="board">
             <Comment>First comment</Comment>
             <Comment>Second comment</Comment>
             <Comment>Third comment</Comment>
